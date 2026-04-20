@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>锂循动力｜基于全生命周期梯度应用的云边协同储能生态系统</title>
+<meta name="description" content="锂循动力专注于退役动力电池梯次利用，构建云边协同储能生态系统，实现分选、重组、储能租赁、低速动力替代与材料回收的全生命周期闭环。" />
+<!-- 引入 Lucide 图标库 -->
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+:root {
+  --bg: #06101b;
+  --bg-soft: #0b1728;
+  --card: rgba(255,255,255,0.04);
+  --line: rgba(255,255,255,0.10);
+  --text: #eef4ff;
+  --muted: #9cb0c7;
+  --green: #39d98a;
+  --blue: #4ea1ff;
+  --cyan: #70e7ff;
+  --yellow: #ffcf66;
+  --shadow: 0 20px 50px rgba(0,0,0,.35);
+  --radius: 22px;
+  --radius-sm: 16px;
+  --max: 1200px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+  color: var(--text);
+  background: 
+    radial-gradient(circle at 0% 0%, rgba(78,161,255,.12), transparent 24%),
+    radial-gradient(circle at 100% 0%, rgba(57,217,138,.10), transparent 24%),
+    linear-gradient(180deg, #06101b 0%, #091423 100%);
+  background-attachment: fixed;
+  line-height: 1.75;
+  overflow-x: hidden;
+}
+
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; display: block; }
+
+.container { width: min(92%, var(--max)); margin: 0 auto; }
+
+/* 导航栏升级 */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(6,16,27,.75);
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  transition: all 0.3s ease;
+}
+
+.nav {
+  min-height: 74px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 12px 0;
+}
+
+.logo { font-size: 24px; font-weight: 800; letter-spacing: .5px; }
+.logo span { color: var(--green); }
+
+.nav-links { display: flex; gap: 24px; align-items: center; }
+.nav-links a {
+  color: var(--muted);
+  font-size: 14px;
+  transition: .25s;
+  position: relative;
+}
+.nav-links a:hover, .nav-links a.active { color: #fff; }
+.nav-links a.active::after {
+  content: ''; position: absolute; bottom: -6px; left: 0; width: 100%;
+  height: 2px; background: var(--green); border-radius: 2px;
+}
+
+/* 按钮样式 */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 12px 24px; border-radius: 999px; font-weight: 700;
+  transition: all .3s ease; border: 1px solid transparent; cursor: pointer;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--green), var(--blue));
+  color: #06101b; box-shadow: 0 10px 30px rgba(57,217,138,.2);
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 15px 35px rgba(57,217,138,.35); }
+.btn-ghost { border-color: var(--line); background: rgba(255,255,255,.03); color: #fff; }
+.btn-ghost:hover { background: rgba(255,255,255,.08); transform: translateY(-2px); border-color: rgba(255,255,255,.2); }
+
+/* 图标基础样式 */
+.icon { width: 1.2em; height: 1.2em; vertical-align: -0.2em; }
+.icon-hl { color: var(--green); margin-right: 8px; }
+
+section { padding: 90px 0; }
+
+/* 英雄首屏 */
+.hero { padding: 120px 0 80px; position: relative; }
+.hero-wrap { display: grid; grid-template-columns: 1.2fr .8fr; gap: 40px; align-items: center; }
+.tag {
+  display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px;
+  border-radius: 999px; border: 1px solid rgba(112,231,255,.22);
+  background: rgba(112,231,255,.08); color: var(--cyan); font-size: 13px; margin-bottom: 20px;
+}
+h1 {
+  font-size: clamp(42px, 6vw, 68px); line-height: 1.1; margin-bottom: 24px; font-weight: 900;
+  text-shadow: 0 4px 20px rgba(112, 231, 255, 0.15);
+}
+.hero p { color: var(--muted); font-size: 18px; margin-bottom: 32px; max-width: 680px; }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 40px; }
+
+/* 信任背书横幅 */
+.trust-banner { border-top: 1px solid var(--line); margin-top: 50px; padding-top: 30px; opacity: 0.7; }
+.trust-banner p { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px; color: var(--muted); }
+.trust-logos { display: flex; gap: 32px; flex-wrap: wrap; align-items: center; font-weight: bold; color: #fff; font-size: 18px;}
+
+/* 玻璃态卡片升级 */
+.stat, .card, .panel, .img-card, .grade, .timeline-item, .cta {
+  background: linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--line); border-top: 1px solid rgba(255,255,255,0.15);
+  border-radius: var(--radius); box-shadow: var(--shadow);
+  transition: all .3s ease;
+}
+.stat:hover, .card:hover, .panel:hover, .grade:hover {
+  transform: translateY(-5px);
+  border-color: rgba(57,217,138,0.4);
+  box-shadow: 0 20px 50px rgba(57,217,138,0.12);
+}
+
+.hero-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.stat { padding: 24px; }
+.stat strong { display: block; color: #fff; font-weight: 800; font-size: 32px; margin-bottom: 4px; }
+.stat span, .card p, .card li { color: var(--muted); font-size: 14px; }
+
+.panel { padding: 32px; }
+.panel h3 { color: #fff; font-size: 24px; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;}
+.panel ul { list-style: none; display: grid; gap: 16px; }
+.panel li {
+  border: 1px solid rgba(255,255,255,.06); background: rgba(255,255,255,.02);
+  border-radius: var(--radius-sm); padding: 16px 20px; display: flex; align-items: flex-start; gap: 12px;
+}
+.panel li p { margin: 0; color: #eef4ff; font-size: 15px;}
+
+.section-title { font-size: 36px; margin-bottom: 16px; }
+.section-desc { max-width: 800px; margin-bottom: 40px; font-size: 16px; color: var(--muted); }
+
+.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+.metric-box { display: grid; grid-template-columns: 1.1fr .9fr; gap: 24px; }
+
+.card { padding: 30px; height: 100%; }
+.card h3 { font-size: 22px; margin-bottom: 16px; color: #fff; display: flex; align-items: center; gap: 8px;}
+.list { padding-left: 24px; display: grid; gap: 10px; }
+.highlight { color: var(--green); font-weight: 700; }
+
+.big-number {
+  font-size: clamp(52px, 8vw, 96px); line-height: 1; font-weight: 900;
+  background: linear-gradient(135deg, #fff, var(--green));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  margin-bottom: 16px; filter: drop-shadow(0 4px 10px rgba(57,217,138,0.2));
+}
+
+.timeline { display: grid; gap: 20px; }
+.timeline-item { display: grid; grid-template-columns: 120px 1fr; gap: 24px; padding: 24px; }
+.step { color: var(--green); font-size: 20px; font-weight: 800; }
+
+.finance { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.finance .card { padding: 26px; }
+.finance strong { font-size: 36px; display: block; color: #fff; margin-bottom: 8px;}
+
+/* 图片卡片样式 */
+.img-card { overflow: hidden; padding: 0; }
+.img-box {
+  width: 100%; aspect-ratio: 16 / 9;
+  background: linear-gradient(135deg, rgba(78,161,255,.1), rgba(57,217,138,.1)), rgba(255,255,255,.02);
+  display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;
+}
+.img-box img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
+.img-card:hover .img-box img { transform: scale(1.05); }
+.img-placeholder { position: absolute; text-align: center; color: #8396ae; font-size: 14px; padding: 20px; }
+.img-caption { padding: 20px 24px; border-top: 1px solid var(--line); }
+
+.cta { text-align: center; padding: 60px 40px; background: linear-gradient(135deg, rgba(57,217,138,.1), rgba(78,161,255,.1)); }
+.cta h2 { font-size: 36px; margin-bottom: 16px; }
+.cta p { max-width: 700px; margin: 0 auto 30px; font-size: 18px; color: var(--muted); }
+
+footer { padding: 30px 0 50px; color: #8396ae; font-size: 14px; border-top: 1px solid var(--line); margin-top: 60px; }
+.footer-line { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+
+/* 动画类 */
+.reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.reveal.show { opacity: 1; transform: translateY(0); }
+
+/* 移动端菜单开关 */
+.mobile-menu-btn { display: none; background: none; border: none; color: white; cursor: pointer; padding: 4px;}
+
+@media (max-width: 1024px) {
+  .hero-wrap, .grid-4, .grid-3, .grid-2, .metric-box, .finance { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 760px) {
+  .mobile-menu-btn { display: block; }
+  .nav-links {
+    position: absolute; top: 100%; left: 0; width: 100%;
+    background: rgba(6,16,27,0.95); backdrop-filter: blur(16px);
+    flex-direction: column; padding: 20px 0; border-bottom: 1px solid var(--line);
+    clip-path: polygon(0 0, 100% 0, 100% 0, 0 0); transition: clip-path 0.4s ease;
+  }
+  .nav-links.active { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+  .nav-links a { padding: 12px 20px; width: 100%; text-align: center; font-size: 16px; }
+  .nav-links a.active::after { display: none; }
+  
+  .hero-wrap, .grid-4, .grid-3, .grid-2, .metric-box, .finance, .timeline-item { grid-template-columns: 1fr; }
+  .timeline-item { gap: 10px; }
+  .hero { padding-top: 60px; }
+  h1 { font-size: 38px; }
+  .btn { width: 100%; }
+}
+</style>
+</head>
+<body>
+<header id="site-header">
+  <div class="container nav">
+    <div class="logo">锂循<span>动力</span></div>
+    <button class="mobile-menu-btn" onclick="toggleMenu()">
+      <i data-lucide="menu" class="icon" style="width: 28px; height: 28px;"></i>
+    </button>
+    <nav class="nav-links" id="nav-links">
+      <a href="#about">项目介绍</a>
+      <a href="#market">市场机会</a>
+      <a href="#solution">解决方案</a>
+      <a href="#products">产品技术</a>
+      <a href="#business">商业模式</a>
+      <a href="#finance">财务融资</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="hero reveal">
+  <div class="container hero-wrap">
+    <div>
+      <div class="tag"><i data-lucide="zap" class="icon"></i> 退役电池梯次利用 · 云边协同储能</div>
+      <h1>重塑退役电池<br>赋能绿色新基建</h1>
+      <p>
+        通过 <span class="highlight">分选—重组—租赁—替代—回收</span> 闭环，将退役动力电池转化为高安全性、高收益的绿色能源数字资产。
+      </p>
+      <div class="hero-actions">
+        <a href="#about" class="btn btn-primary"><i data-lucide="rocket"></i> 了解项目</a>
+        <a href="javascript:alert('投资人您好，请添加项目微信：15140658505获取完整计划书');" class="btn btn-ghost"><i data-lucide="file-text"></i> 获取商业计划书(BP)</a>
+      </div>
+      
+      <div class="hero-stats">
+        <div class="stat">
+          <strong class="count" data-target="137.4">0</strong>
+          <span>2025预计退役规模(GWh)</span>
+        </div>
+        <div class="stat">
+          <strong class="count" data-target="1400">0</strong>
+          <span>2030梯次利用市场(亿元)</span>
+        </div>
+        <div class="stat">
+          <strong>6-8个月</strong>
+          <span>单柜投资回收极速周期</span>
+        </div>
+      </div>
+      
+      <div class="trust-banner">
+        <p>联合研发与技术支持机构</p>
+        <div class="trust-logos">
+            <span>🎓 辽宁工程技术大学</span>
+            <span>⚡ 国家某电网研究院</span>
+            <span>🔋 某头部回收企业</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3><i data-lucide="target" class="icon-hl"></i> 项目核心壁垒</h3>
+      <ul>
+        <li>
+          <i data-lucide="recycle" class="icon-hl"></i>
+          <p><strong>极致压榨剩余价值</strong>：让退役电池再服务 3-5 年，全生命周期利用率提升至 85%以上。</p>
+        </li>
+        <li>
+          <i data-lucide="cpu" class="icon-hl"></i>
+          <p><strong>60秒极速无损检测</strong>：EIS宽频阻抗谱 + AI大模型，实现 SOH 精准预测误差 ≤ 3%。</p>
+        </li>
+        <li>
+          <i data-lucide="blocks" class="icon-hl"></i>
+          <p><strong>"积木式"双模式模组</strong>：打通储能与动力设备的物理接口，资产可灵活跨场景流转。</p>
+        </li>
+        <li>
+          <i data-lucide="cloud" class="icon-hl"></i>
+          <p><strong>锂云数字孪生平台</strong>：实时监测热失控前兆，追踪碳足迹，沉淀可交易的数据资产。</p>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 主视觉图区域 -->
+<section class="reveal" style="padding-top: 0;">
+  <div class="container">
+    <div class="img-card">
+      <div class="img-box">
+        <!-- 注意看这里，如何替换图片 -->
+        <img src="images/project-cover.jpg" loading="lazy" alt="项目主视觉图" onerror="this.style.display='none'">
+        </div>
+      <div class="img-caption">
+        <h3 style="margin-bottom: 4px; color: #fff;">锂循动力智能能源基站（概念图）</h3>
+        <p style="color: var(--muted); font-size: 14px;">支持夜市、工地、露营等多场景快速部署。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about" class="reveal">
+  <div class="container">
+    <h2 class="section-title">项目定位</h2>
+    <p class="section-desc">从单纯的“废品回收”向“绿色资产运营”转型。我们依托云边端架构，解决退役电池在安全性、一致性、商业化上的三大难题。</p>
+    <div class="grid-3">
+      <div class="card">
+        <h3><i data-lucide="briefcase" class="icon-hl"></i> 身份定位</h3>
+        <p>我们不仅是硬件制造商，更是基于退役电池梯次利用的 <span class="highlight">绿色能源资产运营商</span> 和数据服务商。</p>
+      </div>
+      <div class="card">
+        <h3><i data-lucide="git-merge" class="icon-hl"></i> 核心逻辑</h3>
+        <p>独创 A/B/C 三级梯度分流体系，将退役电池无缝匹配至储能租赁、低速动力替代与贵金属回收端。</p>
+      </div>
+      <div class="card">
+        <h3><i data-lucide="flag" class="icon-hl"></i> 战略目标</h3>
+        <p>两年内在全国铺设 1000+ 标准化节点，打造可复制、可追溯、可持续变现的分布式能源网络。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="market" class="reveal">
+  <div class="container">
+    <h2 class="section-title">千亿级蓝海市场</h2>
+    <div class="metric-box">
+      <div class="card">
+        <div class="big-number">1400亿</div>
+        <p>2030年中国梯次利用及回收市场预测规模。随着电动车第一批电池集中退役，结合国家“以旧换新”政策，行业即将迎来爆发式拐点。</p>
+      </div>
+      <div class="card">
+        <h3><i data-lucide="trending-up" class="icon-hl"></i> 为什么是现在？</h3>
+        <ul class="list">
+          <li><strong>供需剪刀差</strong>：退役电池暴增导致采购价大幅下降，而终端用电成本上升。</li>
+          <li><strong>微电网下沉</strong>：夜市经济、露营经济对静音、无烟的移动电源需求激增（替代柴油发电机）。</li>
+          <li><strong>低速车锂电化</strong>：农村三轮车、物流车“铅酸换锂电”需要低成本过渡方案。</li>
+          <li><strong>双碳合规要求</strong>：ESG与碳盘查迫使企业寻求碳足迹清晰的绿色二次能源。</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="solution" class="reveal">
+  <div class="container">
+    <h2 class="section-title">核心解决方案：一核两翼云脑</h2>
+    <p class="section-desc">软硬结合，将离散的、具有风险的退役电池，封装为标准的、高度安全的能源积木。</p>
+    
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="step">01. 一核</div>
+        <div>
+          <h3 style="color:#fff; margin-bottom:8px;">自研“能量积木”标准模组</h3>
+          <p>开发 48V/2kWh 标准化模块，内置主动均衡 BMS 与“灵犀”通信接口，实现一块电池在储能柜与物流车之间的盲插与协议自适应。</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="step">02. 两翼</div>
+        <div>
+          <h3 style="color:#fff; margin-bottom:8px;">智能聚类与梯度变现</h3>
+          <p>SOH≥80% 入局高频时租；60-80% 流入低速农机与物流长租；不足 60% 直接无害化拆解，实现“吃干榨净”。</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="step">03. 云脑</div>
+        <div>
+          <h3 style="color:#fff; margin-bottom:8px;">锂云数字孪生大模型</h3>
+          <p>为每块电池建立区块链溯源档案，结合云端 AI 算法进行热失控提前 48 小时预警及全生命周期碳减排核算。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="products" class="reveal">
+  <div class="container">
+    <h2 class="section-title">硬件架构图示</h2>
+    <div class="grid-3">
+      <!-- 占位图 1 -->
+      <div class="img-card">
+        <div class="img-box">
+          <img src="images/module.jpg" loading="lazy" onerror="this.style.display='none'">
+          </div>
+        <div class="img-caption"><h3 style="color:#fff;">硬件Ⅰ: 能量积木</h3><p>IP67级防水/主动均衡</p></div>
+      </div>
+      <!-- 占位图 2 -->
+      <div class="img-card">
+        <div class="img-box">
+          <img src="images/cabinet.jpg" loading="lazy" onerror="this.style.display='none'">
+          </div>
+        <div class="img-caption"><h3 style="color:#fff;">硬件Ⅱ: 云边储能柜</h3><p>12仓级联/气溶胶消防</p></div>
+      </div>
+      <!-- 占位图 3 -->
+      <div class="img-card">
+        <div class="img-box">
+          <img src="images/software.jpg" loading="lazy" onerror="this.style.display='none'">
+          </div>
+        <div class="img-caption"><h3 style="color:#fff;">软件: 锂云平台</h3><p>三维孪生/风险风控看板</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="business" class="reveal">
+  <div class="container">
+    <h2 class="section-title">商业模式：HaaS + DaaS</h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3><i data-lucide="users" class="icon-hl"></i> 客群与触点</h3>
+        <ul class="list">
+          <li><strong>C端高频使用</strong>：夜市摊主、户外露营、应急救援扫码租电。</li>
+          <li><strong>B端长租替代</strong>：外卖站点换电、园区物流车电池租赁。</li>
+          <li><strong>大B端/G端赋能</strong>：为回收企业提供检测服务、为政府提供碳数据资产。</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3><i data-lucide="coins" class="icon-hl"></i> 多重盈利矩阵</h3>
+        <ul class="list">
+          <li>💰 <strong>主营现金流</strong>：单点位设备的分时租赁费。</li>
+          <li>📉 <strong>峰谷套利</strong>：夜间市电低谷充电，白天用电高峰出租。</li>
+          <li>♻️ <strong>残值回收</strong>：废弃电芯出售给黑粉湿法冶金厂保底。</li>
+          <li>🌱 <strong>绿色溢价</strong>：碳减排指标（CCER）沉淀与数据服务费。</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="finance" class="reveal">
+  <div class="container">
+    <h2 class="section-title">财务亮点与首轮融资</h2>
+    <p class="section-desc">相比新电池储能系统，退役电池 BOM 成本直降 70%，造就极致的投资回报率。</p>
+    
+    <div class="finance" style="margin-bottom: 24px;">
+      <div class="card">
+        <strong class="count" data-target="17000">0</strong>
+        <p>单台设备极低综合成本 (元)</p>
+      </div>
+      <div class="card">
+        <strong class="count" data-target="1500">0</strong>
+        <p>保守估计月净现金流 (元)</p>
+      </div>
+      <div class="card">
+        <strong class="count" data-target="67000">0</strong>
+        <p>三年生命周期总回报 (元)</p>
+      </div>
+      <div class="card">
+        <strong>70%+</strong>
+        <p>项目综合毛利率</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="color:var(--yellow);"><i data-lucide="award"></i> 天使轮融资方案 (Seed Round)</h3>
+      <div style="display:flex; gap: 40px; flex-wrap:wrap; margin-top:16px;">
+        <div><p style="color:#fff; font-size:18px;">目标融资金额</p><strong style="font-size:32px; color:var(--yellow);">￥1,000,000</strong></div>
+        <div><p style="color:#fff; font-size:18px;">出让股权比例</p><strong style="font-size:32px; color:#fff;">10%</strong></div>
+        <div style="flex:1; min-width: 200px;">
+          <p style="color:#fff; font-size:18px;">资金主要用途</p>
+          <div style="display:flex; height:12px; border-radius:6px; overflow:hidden; margin-top:10px;">
+            <div style="width:40%; background:var(--green);" title="首批硬件制造 40%"></div>
+            <div style="width:30%; background:var(--blue);" title="算法与云平台迭代 30%"></div>
+            <div style="width:20%; background:var(--yellow);" title="市场渠道与地推 20%"></div>
+            <div style="width:10%; background:var(--cyan);" title="风险备用金 10%"></div>
+          </div>
+          <p style="font-size:12px; color:var(--muted); margin-top:6px;">🟩40%硬件 🟦30%研发 🟨20%市场 🟦10%备用</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="reveal">
+  <div class="container">
+    <div class="cta">
+      <h2>成为绿色能源新基建的合伙人</h2>
+      <p>商业向善，科技共赢。我们正在寻找懂新能源赛道、有园区/场景资源的早期投资机构与合伙人。</p>
+      <a href="javascript:alert('【联系我们】\n项目负责人：孙鑫宇\n联系电话：151-4065-8505\n邮箱：sunmmy0910@163.com\n\n欢迎投资人与合作伙伴添加微信交流！');" class="btn btn-primary"><i data-lucide="mail"></i> 立即沟通合作</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="container footer-line">
+    <div>© 2025-2026 锂循动力 Lithium-Cycle. All Rights Reserved.</div>
+    <div>立足中国 · 赋能全球零碳未来</div>
+  </div>
+</footer>
+
+<script>
+// 初始化图标
+lucide.createIcons();
+
+// 移动端菜单切换
+function toggleMenu() {
+  document.getElementById('nav-links').classList.toggle('active');
+}
+// 点击菜单项自动收起
+document.querySelectorAll('.nav-links a').forEach(link => {
+  link.addEventListener('click', () => {
+    document.getElementById('nav-links').classList.remove('active');
+  });
+});
+
+// 顶部导航栏透明度滚动效果
+const header = document.getElementById('site-header');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 20) {
+    header.style.background = 'rgba(6,16,27,.95)';
+    header.style.boxShadow = '0 10px 30px rgba(0,0,0,0.5)';
+  } else {
+    header.style.background = 'rgba(6,16,27,.75)';
+    header.style.boxShadow = 'none';
+  }
+});
+
+// 滚动监听 (ScrollSpy) - 导航栏高亮当前所处区块
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-links a');
+
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(section => {
+    const sectionTop = section.offsetTop;
+    // 减去导航栏高度留出缓冲
+    if (pageYOffset >= sectionTop - 120) {
+      current = section.getAttribute('id');
+    }
+  });
+  navLinks.forEach(link => {
+    link.classList.remove('active');
+    if (link.getAttribute('href') === `#${current}`) {
+      link.classList.add('active');
+    }
+  });
+});
+
+// 滚动显现动画
+const reveals = document.querySelectorAll('.reveal');
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('show');
+    }
+  });
+}, { threshold: 0.1 });
+reveals.forEach(el => revealObserver.observe(el));
+
+// 数字增长动画
+const counters = document.querySelectorAll('.count');
+const counterObserver = new IntersectionObserver((entries, observer) => {
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    const el = entry.target;
+    const target = parseFloat(el.dataset.target);
+    const isFloat = String(el.dataset.target).includes('.');
+    const duration = 2000;
+    const start = 0;
+    let startTime = null;
+
+    function updateCounter(timestamp) {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+      // 缓动函数 (Ease out)
+      const easeProgress = 1 - Math.pow(1 - progress, 3); 
+      const value = start + (target - start) * easeProgress;
+
+      if (isFloat) {
+        el.textContent = value.toFixed(1);
+      } else {
+        el.textContent = Math.floor(value).toLocaleString();
+      }
+
+      if (progress < 1) {
+        requestAnimationFrame(updateCounter);
+      } else {
+        el.textContent = isFloat ? target.toFixed(1) : target.toLocaleString();
+      }
+    }
+    requestAnimationFrame(updateCounter);
+    observer.unobserve(el);
+  });
+}, { threshold: 0.4 });
+counters.forEach(counter => counterObserver.observe(counter));
+</script>
+</body>
+</html>
